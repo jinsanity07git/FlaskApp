@@ -1,4 +1,5 @@
-from flask import Flask,make_response
+from flask import Flask,make_response,jsonify
+from yushun_book import YuShuBook 
 from helper import is_isbn_or_key
 
 __author__ = "jinsanity"
@@ -10,6 +11,13 @@ app.config.from_object('config')
 @app.route('/book/search/<q>/<page>')
 def search(q,page):
     isbn_or_key = is_isbn_or_key(q)
+    if isbn_or_key =='isbn':
+        result = YuShuBook.search_by_isbn(q)
+    else:
+        result = YuShuBook.search_by_keyword(q)
+
+    return jsonify(result)
+
     pass
 
 

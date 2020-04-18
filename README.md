@@ -128,8 +128,64 @@ def search(q,page):
 3-5 requests发送http请求及代码的简化手段
 
 ```
+class HTTP:
+
+    @staticmethod
+    def get(url, return_json=True):
+        r = requests.get(url)
+        # restful
+        # json
+        if r.status_code != 200:
+            return {} if return_json else ''
+        return r.json() if return_json else r.text
 
 ```
+
+
+
+3-6 requests vs urllib
+
+```
+staticmethod vs classmethod
+staticmethod: no self
+classmethod : no self but cls
+
+经典类 VS 新式类
+```
+
+3-7 从API获取数据
+
+
+
+```
+self : 链式查找
+
+
+from http import HTTP
+
+class YuShuBook:
+    isbn_url ='http://t.yushu.im/v2/book/isbn/{}'
+    keyword_url = 'http://t.yushu.im/v2/book/search?q={}&start={}&count={}'
+
+    @classmethod
+    def search_by_isbn(cls, isbn):
+        url = cls.isbn_url.format(isbn)
+        result=HTTP.get(url)
+        return result
+    @classmethod
+    def search_by_keyword(cls, keyword, count=15, start=0):
+        url = cls.keyword_url.format(keyword, count, start)
+        results = HTTP.get(url)
+        return results
+```
+
+3-8 使用jsonify
+
+http.py 会与 自带的http.client 冲突
+
+
+
+3-9 将视图函数拆分到单独的文件中 
 
 
 
