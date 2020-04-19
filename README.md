@@ -252,3 +252,33 @@ def search(q,page):
  
 ```
 
+
+
+4-3 单蓝图多模块拆分视图函数
+
+
+
+```
+__init__.py
+from flask import Blueprint
+
+web = Blueprint('web', __name__)
+
+from app.web import book
+from app.web import user
+```
+
+
+
+4-4 request 对象
+
+```
+http://localhost:5000/book/search?q=9787111562108&page=123
+
+pyCharm debugger
+check the type of request: LocalProxy or response
+
+```
+
+
+
