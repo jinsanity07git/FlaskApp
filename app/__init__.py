@@ -7,6 +7,8 @@ def create_app():
     register_blueprint(app)
     return app
 
+
 def register_blueprint(app):
     from app.web.book import web
+    # from app.web.user import user
     app.register_blueprint(web)
