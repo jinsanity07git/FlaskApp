@@ -187,5 +187,68 @@ http.py 会与 自带的http.client 冲突
 
 3-9 将视图函数拆分到单独的文件中 
 
+如何导入 app 到分文件中？
 
+3-10 深入了解flask路由
+
+![image-20200418190521528](README_img/image-20200418190521528.png)
+
+3-11 循环引入流程分析.a
+
+![image-20200418191349505](README_img/image-20200418191349505.png)
+
+3-12 找不到视图函数的最终解释与证明
+
+```
+print ("id:" + str(id(app) + entity)
+```
+
+
+
+4-1 应用、蓝图与视图函数
+
+![image-20200418192822874](README_img/image-20200418192822874.png)
+
+
+
+4-2 用蓝图注册视图函数
+
+App/init
+
+```
+from flask import Flask
+
+
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object('config')
+    register_blueprint(app)
+    return app
+
+def register_blueprint(app):
+    from app.web.book import web
+    app.register_blueprint(web)
+```
+
+app/Web/book
+
+```
+from flask import jsonify
+from yushun_book import YuShuBook 
+from helper import is_isbn_or_key
+from flask import Blueprint
+
+web = Blueprint('web',__name__)
+
+@web.route('/book/search/<q>/<page>')
+def search(q,page):
+    isbn_or_key = is_isbn_or_key(q)
+    if isbn_or_key =='isbn':
+        result = YuShuBook.search_by_isbn(q)
+    else:
+        result = YuShuBook.search_by_keyword(q)
+
+    return jsonify(result)
+ 
+```
 
