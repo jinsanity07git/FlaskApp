@@ -280,5 +280,120 @@ check the type of request: LocalProxy or response
 
 ```
 
+4-5 WTForms参数验证
+
+```
+pipenv install wtforms
+
+```
+
+```
+from wtforms import Form, StringField, IntegerField
+from wtforms.validators import Length, NumberRange
+
+
+class SearchFrom(Form):
+    q = StringField(validators=[Length(min=1, max=30)])
+    page = IntegerField(validators=[NumberRange(min=1, max=99)], default=1)
+
+```
+
+
+
+4-6 拆分配置文件
+
+```
+http://localhost:5000/book/search?q=9787111562108
+
+http://localhost:5000/book/search?q= &page=1
+
+localhost:5000/book/search?q=郭敬明&page=1
+```
+
+```
+setting.py
+secure.py 
+
+from flask import current_app
+```
+
+
+
+4-7 Model First、Database First与Code First
+
+```
+libs
+```
+
+4-8 定义第一个模型类
+
+```
+pipenv install flask_sqlalchemy
+```
+
+```
+(flaskApp) jinsanity@jinsanity-pro flaskApp % pipenv graph
+Flask-SQLAlchemy==2.4.1
+  - Flask [required: >=0.10, installed: 1.1.2]
+    - click [required: >=5.1, installed: 7.1.1]
+    - itsdangerous [required: >=0.24, installed: 1.1.0]
+    - Jinja2 [required: >=2.10.1, installed: 2.11.2]
+      - MarkupSafe [required: >=0.23, installed: 1.1.1]
+    - Werkzeug [required: >=0.15, installed: 1.0.1]
+  - SQLAlchemy [required: >=0.8.0, installed: 1.3.16]
+http-client==0.1.22
+  - pycurl [required: Any, installed: 7.43.0.5]
+  - six [required: Any, installed: 1.14.0]
+requests==2.23.0
+  - certifi [required: >=2017.4.17, installed: 2020.4.5.1]
+  - chardet [required: >=3.0.2,<4, installed: 3.0.4]
+  - idna [required: >=2.5,<3, installed: 2.9]
+  - urllib3 [required: >=1.21.1,<1.26,!=1.25.1,!=1.25.0, installed: 1.25.9]
+WTForms==2.2.1
+
+```
+
+4-9 将模型映射到数据库中
+
+```
+from app.models.book import db
+    
+    db.init(app)
+```
+
+```
+pipenv install cymysql
+```
+
+```
+SQLALCHEMY_DATABASE_URI =
+```
+
+```
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object('app.secure')
+    app.config.from_object('app.setting')
+    register_blueprint(app)
+
+    db.init_app(app)
+    db.create_all()
+    return app
+```
+
+```
+RuntimeError: No application found. Either work inside a view function or push an application context.
+```
+
+
+
+4-10 ORM与CodeFirst区别
+
+```
+db.create_all(app=app）
+
+## MVC model 业务逻辑放M层
+```
+
 
 

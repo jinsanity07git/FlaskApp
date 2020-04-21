@@ -11,6 +11,9 @@ http = "*"
 http-client = "*"
 urllib = "*"
 requests = "*"
+wtforms = "*"
+flask-sqlalchemy = "*"
+cymysql = "*"
 
 [requires]
 python_version = "3.6"
