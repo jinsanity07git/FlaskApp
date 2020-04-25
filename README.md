@@ -1,4 +1,7 @@
+
+
 # flaskApp
+
 flask learning
 
 
@@ -396,4 +399,345 @@ db.create_all(app=app）
 ```
 
 
+
+5-1 flask中经典错误 working outside application context
+
+```
+current_app
+--LocalProxy()
+
+```
+
+```
+request
+--LocalProxy()
+```
+
+
+
+5-2 AppContext、RequestContext、Flask与Request之间的关系
+
+```
+应用上下文对象
+	AppContext 
+请求上下文对象 
+	RequestContext 
+	
+	localProxy provide a indriect method to manipulate a Context object
+	
+	
+```
+
+5-3 详解flask上下文与出入栈
+
+![image-20200422140551654](README_img/image-20200422140551654.png)
+
+```
+stack LIFO
+queue FIFO
+
+# get AppContext Object 
+ctx= app.app_context()
+# push object to stack
+ctx.push()
+
+## offline application & unit test 
+```
+
+
+
+5-4 flask上下文与with语句
+
+```
+#实现了上下文协议的对象使用with
+#上下文管理器
+# __enter__  __exit__
+#上下文表达式必须要返回一个上下文管理器
+
+```
+
+```
+class A:
+	def __enter__(self):
+			a = 1
+			return a
+			
+	def __exit__(self):
+			b = 2
+			
+with A() as obj_A:
+	pass
+	  
+```
+
+5-5 详解上下文管理器的__exit__方法
+
+```
+exc_type,exc_value,tb
+```
+
+5-6 阅读源码解决db.create_all的问题
+
+```
+
+```
+
+6-1 什么是进程
+
+```
+进程调度
+挂起算法
+
+操作系统原理
+
+```
+
+6-2 线程的概念
+
+```
+更小单元
+灵活 小巧 轻便
+进程：分配资源
+线程：属于进程，利用CPU执行代码，访问进程资源
+```
+
+6-3,6-4 多线程的优势与好处
+
+```
+
+```
+
+7-1 ViewModel的基本概念
+
+![image-20200422153459531](README_img/image-20200422153459531.png)
+
+裁剪；修饰；合并
+
+7-2 使用ViewModel处理书籍数据 上
+
+7-3 使用ViewModel处理书籍数据 下
+
+7-4 伪面向对象：披着面向对象外衣的面向过程
+
+```
+# 描述特征 （类变量、实例变量）
+# 行为	（方法）
+
+```
+
+7-5 重构鱼书核心对象：YuShuBook 上
+
+7-5 重构鱼书核心对象：YuShuBook 下
+
+```
+
+```
+
+7-7 从json序列化看代码解释权反转
+
+```
+python 不能直接序列化一个对象
+
+```
+
+![image-20200422161557388](README_img/image-20200422161557388.png)
+
+```
+json.dumps(books, default=lambda obj: obj.__dict__)
+```
+
+7-8 详解单页面与网站的区别
+
+ ![image-20200422162420053](README_img/image-20200422162420053.png)
+
+
+
+多页面
+
+![image-20200422162516347](README_img/image-20200422162516347.png)
+
+
+
+单页面：数据填充,模板渲染 在客户端进行; AJAX
+
+![image-20200422162718871](README_img/image-20200422162718871.png)
+
+
+
+8-1 静态文件访问原理
+
+```
+static
+```
+
+8-2 模板文件的位置与修改方案
+
+```
+render_template()
+
+项目层级
+蓝图层级
+```
+
+8-3 Jinja2的概念
+
+```
+template language
+```
+
+8-4 在Jinja2中读取字典和对象
+
+```
+{{ data.age}}
+```
+
+8-5 流程控制语句 if
+
+```
+{% if ... == 18: %}
+
+{% elif %}
+{% else %}
+
+{% endif%}
+```
+
+8-6 流程控制语句 for in 循环
+
+```
+{% for ... iin %}
+{% endfor %}
+```
+
+8-7 使用模板继承
+
+```
+{%extends ' .html'%}
+{{super()}}
+
+{%block head %}
+{%endcontent %}
+
+
+```
+
+
+
+8-8 过滤器与管道命令
+
+```
+{{data,name | default('未名')}}
+
+|  : linux tunnel command
+```
+
+8-9 反向构建URL
+
+```
+herf = {{url_for(‘  ’  )， filename = 'text.css'}} 
+
+```
+
+8-10 消息闪现、SecretyKey与变量作用域
+
+```
+flash messages
+
+{% set msg = get_flashed_message() %}
+
+secret_key
+
+变量作用域: with endwith
+```
+
+8-11 显示搜索结果页面
+
+```
+http://localhost:5000/book/search
+
+flash('搜索的关键字不符合要求，请重新输入关键字')
+```
+
+8-12 页面结构解析
+
+```
+ <form class="form-inline" action="{{ url_for('web.search') }}" method="get">
+                <div class="flex-vertical-center-height">
+                    <div class="col-md-2">
+                        <img src="{{url_for('static', filename='images/logo-yushu.png')}}"/>
+                    </div>
+                    <div style="margin-left:30px;" class="col-md-8 input-group">
+                        <input name="q" type="text" placeholder="ISBN、图书名称"
+                               class="form-control input-sm">
+                        <span class="input-group-btn">
+                            <input class="btn btn-search" type="submit" value="搜索"/>
+                        </span>
+                    </div>
+                </div>
+            </form>
+```
+
+9-1 viewmodel意义的体现与filter函数的巧妙应用
+
+```
+    @property
+    def intro(self):
+        intros = filter(lambda x: True if x else False,
+                        [self.author, self.publisher, self.price])
+        return ' / '.join(intros)
+
+```
+
+9-2 书籍详情页面业务逻辑分析
+
+![image-20200424154959413](README_img/image-20200424154959413.png)
+
+9-3 实现书籍详情页面
+
+```
+   yushu_book.py
+   
+   @property
+    def first(self):
+        return self.books[0] if self.total >= 1 else None
+```
+
+9-4 模型与模型关系
+
+```
+   from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
+   uid = Column(Integer, ForeignKey('user.id'), nullable=False)
+```
+
+9-5 自定义基类模型
+
+```
+# status used for soft remove
+class Base(db.Model):
+    __abstract__ = True
+    create_time = Column('create_time', Integer)
+    status = Column(SmallInteger, default=1)
+    
+ class Gift(Base):
+    __tablename__ = 'gift'
+
+    id = Column(Integer, primary_key=True)
+    uid = Column(Integer, ForeignKey('user.id'), nullable=False)
+    user = relationship('User')
+    isbn = Column(String(13))
+    launched = Column(Boolean, default=False)
+```
+
+
+
+9-6 用户注册
+
+```
+ __abstract__ = True #避免默认注册表
+ 
+ http://0.0.0.0:5000/register
+ 
+get 访问
+post 提交表单
+```
 

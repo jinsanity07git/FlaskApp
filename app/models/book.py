@@ -1,7 +1,9 @@
 from sqlalchemy import Column, Integer, String
 from flask_sqlalchemy import SQLAlchemy
+from app.models.base import db
 
-db = SQLAlchemy()
+
+# db = SQLAlchemy()
 
 
 class Book(db.Model):
